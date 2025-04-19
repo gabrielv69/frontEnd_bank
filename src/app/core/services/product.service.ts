@@ -36,7 +36,6 @@ export class ProductService {
   }
 
   checkIdExists(id: string): Observable<boolean> {
-    return this.http.get<boolean>(`${constants.SERVICES.PRODUCT_SERVICES.APIV1.PATH}
-      ${constants.SERVICES.PRODUCT_SERVICES.APIV1.CONTROLLERS.VERIFITCATION}${id}`);
+    return this.http.get<boolean>(`${constants.SERVICES.PRODUCT_SERVICES.APIV1.PATH}${constants.SERVICES.PRODUCT_SERVICES.APIV1.CONTROLLERS.VERIFITCATION}${id}`);
   }
 }

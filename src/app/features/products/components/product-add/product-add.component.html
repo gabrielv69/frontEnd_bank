@@ -1,7 +1,6 @@
 <div class="products-page">
   <header class="header">
     <h1>BANCO</h1>
-
   </header>
   <div class="form-container">
     <form
@@ -22,6 +21,7 @@
             id="id"
             formControlName="id"
             required
+            [(ngModel)]="product.id"
             maxlength="10"
           />
           <span *ngIf="getFieldErrors('id').show" class="error-message">
@@ -47,6 +47,7 @@
             formControlName="name"
             required
             maxlength="100"
+            [(ngModel)]="product.name"
           />
           <span *ngIf="getFieldErrors('name').show" class="error-message">
             <ng-container *ngIf="getFieldErrors('name').required"
@@ -73,6 +74,7 @@
             formControlName="description"
             required
             maxlength="200"
+            [(ngModel)]="product.description"
           />
           <span
             *ngIf="getFieldErrors('description').show"
@@ -96,7 +98,13 @@
 
         <div class="form-group">
           <label for="logo">Logo</label>
-          <input type="text" id="logo" formControlName="logo" required />
+          <input
+            type="text"
+            id="logo"
+            formControlName="logo"
+            required
+            [(ngModel)]="product.logo"
+          />
           <span
             class="error-message"
             *ngIf="
@@ -117,6 +125,7 @@
             formControlName="date_release"
             required
             [min]="minDate"
+            [(ngModel)]="product.date_release"
           />
           <span
             class="error-message"
@@ -136,7 +145,7 @@
             id="fechaRevision"
             formControlName="date_revision"
             required
-            [disabled]="true"
+            [(ngModel)]="product.date_revision"
           />
           <ng-container
             *ngIf="getFieldErrors('date_release') as dateReleaseErrors"

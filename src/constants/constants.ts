@@ -6,15 +6,23 @@ export const constants = {
       APIV1: {
         PATH: '/bp/products',
         CONTROLLERS: {
-          VERIFITCATION: '/verification',
+          VERIFITCATION: '/verification/',
         }
       }
     }
   },
+  RESPONSES:{
+    PRODUCTS:{
+      SAVE_CORRECT: 'Product added successfully',
+    },
+  },
   MESSAGES: {
     PRODUCTS:{
       ERROR_SERVICE:'Ha ocurrido un error al consumir el servicio, comuníquese con el equipo administrador.',
+      ID_EXIST:'Ese ID ya existe, ingrese uno diferente.',
       NO_DATA: 'No existen datos para mostrar.',
+      SAVE: 'Registro exitoso, se ha guardado correctamente el producto',
+      ERROR_SAVE: 'No se ha podido guardar el producto',
       UPDATE: 'Persona modificada con éxito',
       DELETE: 'eliminada con éxito',
       CONFIRM_DELETE: '<br>¿Está seguro de eliminar este elemento?'

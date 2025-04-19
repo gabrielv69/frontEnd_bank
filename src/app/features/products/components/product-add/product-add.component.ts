@@ -11,7 +11,19 @@ import {
 import { Component, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { MessageService } from '../../../../core/services/message.service';
+import { Product } from './../../../../core/models/product.model';
 import { ProductService } from '../../../../core/services/product.service';
+import { constants } from '../../../../../constants/constants';
+import { firstValueFrom } from 'rxjs';
+
+/**
+ * Products add component
+ *
+ * @author gvivas on 2025/04/18.
+ * @version 1.0
+ * @since 1.0.0
+ */
 
 @Component({
   selector: 'app-product-add',
@@ -20,10 +32,23 @@ import { ProductService } from '../../../../core/services/product.service';
   styleUrl: './product-add.component.scss',
 })
 export class ProductAddComponent implements OnInit {
+  product: Product = {
+    id: '',
+    name: '',
+    description: '',
+    logo: '',
+    date_release: new Date(),
+    date_revision: new Date(),
+  };
+
   productForm!: FormGroup;
   minDate: string = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
-  constructor(private fb: FormBuilder, private productService: ProductService) {
+  constructor(
+    private fb: FormBuilder,
+    private productService: ProductService,
+    private messageService: MessageService
+  ) {
     this.buildForm();
   }
 
@@ -60,7 +85,7 @@ export class ProductAddComponent implements OnInit {
       logo: ['', Validators.required],
       date_release: [
         '',
-        [Validators.required, this.minDateValidator(this.minDate)]
+        [Validators.required, this.minDateValidator(this.minDate)],
       ],
       date_revision: [{ value: '', disabled: true }, Validators.required],
     });
@@ -75,9 +100,7 @@ export class ProductAddComponent implements OnInit {
   }
 
   listenToDateRelease(): void {
-    this.productForm
-      .get('date_release')
-      ?.valueChanges.subscribe((releaseDate: string) => {
+    this.productForm.get('date_release')?.valueChanges.subscribe((releaseDate: string) => {
         if (releaseDate) {
           const revisionDate = this.addOneYear(releaseDate);
           this.productForm.get('date_revision')?.setValue(revisionDate);
@@ -96,13 +119,18 @@ export class ProductAddComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched();
       return;
     }
     if (this.productForm.valid) {
-      this.productService.create(this.productForm.value).subscribe();
+      const isValid = await this.verificateId(this.product.id);
+      if (isValid) {
+        this.messageService.showMessage(constants.MESSAGES.PRODUCTS.ID_EXIST, 'error');
+      } else {
+        this.createProduct(this.product);
+      }
     }
   }
 
@@ -115,8 +143,33 @@ export class ProductAddComponent implements OnInit {
       required: !!errors?.['required'],
       minlength: !!errors?.['minlength'],
       maxlength: !!errors?.['maxlength'],
-      minDate: !!errors?.['minDate']
+      minDate: !!errors?.['minDate'],
     };
   }
 
+  async verificateId(id: string): Promise<boolean> {
+    try {
+      const response = await firstValueFrom(this.productService.checkIdExists(id));
+      return response;
+    } catch (error) {
+      this.messageService.showMessage(constants.MESSAGES.PRODUCTS.ERROR_SERVICE, 'error');
+      return true;
+    }
+  }
+
+  createProduct(product: Product) {
+    this.productService.create(product).subscribe(
+      (response) => {
+        if (response.message===constants.RESPONSES.PRODUCTS.SAVE_CORRECT) {
+          this.productForm.reset();
+          this.messageService.showMessage(constants.MESSAGES.PRODUCTS.SAVE, 'success');
+        } else {
+          this.messageService.showMessage(constants.MESSAGES.PRODUCTS.ERROR_SAVE, 'error');
+        }
+      },
+      (error) => {
+        this.messageService.showMessage(constants.MESSAGES.PRODUCTS.ERROR_SERVICE, 'error');
+      }
+    );
+  }
 }
