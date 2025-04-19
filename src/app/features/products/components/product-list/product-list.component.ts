@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MessageService } from './../../../../core/services/message.service';
 import { NavigationService } from '../../../../core/services/navigation.service';
 import { Product } from '../../../../core/models/product.model';
+import { ProductMenuComponent } from '../product-menu/product-menu.component';
 import { ProductService } from '../../../../core/services/product.service';
 import { constants } from '../../../../../constants/constants';
 
@@ -18,7 +19,7 @@ import { constants } from '../../../../../constants/constants';
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule, ProductMenuComponent],
   providers: [],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss',
@@ -34,8 +35,9 @@ export class ProductListComponent implements OnInit {
   pageSize = this.itemsPerPageOptions[0];
   searchQuery: string = '';
 
-  constructor(private productsService: ProductService,
-    private messageService:MessageService,
+  constructor(
+    private productsService: ProductService,
+    private messageService: MessageService,
     private navigationService: NavigationService
   ) {}
 
@@ -46,22 +48,32 @@ export class ProductListComponent implements OnInit {
   loadProducts() {
     this.productsService.getAll().subscribe(
       (response) => {
-        if (response.data &&response.data.length>0) {
+        if (response.data && response.data.length > 0) {
           this.products = response.data;
-          this.filteredProducts=this.products;
+          this.filteredProducts = this.products;
           this.updateVisibleProducts();
         } else {
-          this.messageService.showMessage(constants.MESSAGES.PRODUCTS.NO_DATA, 'info');
+          this.messageService.showMessage(
+            constants.MESSAGES.PRODUCTS.NO_DATA,
+            'info'
+          );
         }
       },
       (error) => {
-        this.messageService.showMessage(constants.MESSAGES.PRODUCTS.ERROR_SERVICE, 'error');
+        this.messageService.showMessage(
+          constants.MESSAGES.PRODUCTS.ERROR_SERVICE,
+          'error'
+        );
       }
     );
   }
 
   getInitials(name: string): string {
-    return name.split(' ').map(w => w[0]).join('').toUpperCase();
+    return name
+      .split(' ')
+      .map((w) => w[0])
+      .join('')
+      .toUpperCase();
   }
 
   updateVisibleProducts(): void {
@@ -71,8 +83,8 @@ export class ProductListComponent implements OnInit {
   applyFilter(): void {
     const query = this.searchQuery.toLowerCase().trim();
 
-    this.filteredProducts = this.products.filter(product =>
-      Object.values(product).some(value =>
+    this.filteredProducts = this.products.filter((product) =>
+      Object.values(product).some((value) =>
         String(value).toLowerCase().includes(query)
       )
     );
@@ -80,8 +92,16 @@ export class ProductListComponent implements OnInit {
     this.updateVisibleProducts();
   }
 
-  redirectToAdd(){
-    this.navigationService.goToAdd();
+  redirectToAdd(product:Product | null) {
+    this.navigationService.goToAdd(product);
   }
 
+  onEdit(product: Product) {
+    this.redirectToAdd(product);
+  }
+
+  onDelete(product: Product) {
+    console.log('DELETE');
+    console.log(product);
+  }
 }

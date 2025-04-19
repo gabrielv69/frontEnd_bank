@@ -1,0 +1,7 @@
+<div class="menu-container" (click)="onMenuClick($event)">
+  <button class="menu-button" (click)="toggleMenu($event)">⋮</button>
+  <ul *ngIf="isOpen" class="menu-options">
+    <li (click)="edit.emit()">Editar</li>
+    <li (click)="delete.emit()">Eliminar</li>
+  </ul>
+</div>
