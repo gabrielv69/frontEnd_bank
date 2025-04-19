@@ -1,0 +1,56 @@
+<div class="products-page">
+  <header class="header">
+    <h1>BANCO</h1>
+  </header>
+  <section class="table-container">
+    <div class="actions">
+      <input type="text" class="search-input" placeholder="Search.."  [(ngModel)]="searchQuery"  (ngModelChange)="applyFilter()"/>
+      <button class="btn-agregar">Agregar</button>
+    </div>
+    <table class="products-table">
+      <thead>
+        <tr>
+          <th>Logo</th>
+          <th>Nombre del producto</th>
+          <th>
+            Descripción
+            <span class="info-icon">i</span>
+          </th>
+          <th>
+            Fecha de liberación
+            <span class="info-icon">i</span>
+          </th>
+          <th>
+            Fecha de reestructuración
+            <span class="info-icon">i</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of visibleProducts">
+          <td>
+            <div class="avatar">{{ getInitials(product.name) }}</div>
+          </td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.date_release | date : "dd/MM/yyyy" }}</td>
+          <td>{{ product.date_revision | date : "dd/MM/yyyy" }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="footer">
+      <span>{{ visibleProducts.length }} Resultados</span>
+
+      <select
+        class="page-size"
+        [(ngModel)]="pageSize"
+        (change)="updateVisibleProducts()"
+      >
+        <option *ngFor="let option of itemsPerPageOptions" [value]="option">
+          {{ option }}
+        </option>
+      </select>
+    </div>
+  </section>
+</div>
