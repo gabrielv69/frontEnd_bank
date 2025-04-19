@@ -28,7 +28,7 @@ export class ProductService {
   }
 
   update(id: string, product: Product): Observable<ResponseApi> {
-    return this.http.put<ResponseApi>(`${constants.SERVICES.PRODUCT_SERVICES.APIV1.PATH}${id}`, product);
+    return this.http.put<ResponseApi>(`${constants.SERVICES.PRODUCT_SERVICES.APIV1.PATH}/${id}`, product);
   }
 
   delete(id: string): Observable<ResponseApi> {

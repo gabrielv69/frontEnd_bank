@@ -14,6 +14,7 @@ export const constants = {
   RESPONSES:{
     PRODUCTS:{
       SAVE_CORRECT: 'Product added successfully',
+      UPDATE_CORRECT: 'Product updated successfully'
     },
   },
   MESSAGES: {
@@ -23,7 +24,8 @@ export const constants = {
       NO_DATA: 'No existen datos para mostrar.',
       SAVE: 'Registro exitoso, se ha guardado correctamente el producto',
       ERROR_SAVE: 'No se ha podido guardar el producto',
-      UPDATE: 'Persona modificada con éxito',
+      ERROR_UPDATE: 'No se ha podido actualizar el producto',
+      UPDATE: 'Registro exitoso, se ha actualizado correctamente el producto',
       DELETE: 'eliminada con éxito',
       CONFIRM_DELETE: '<br>¿Está seguro de eliminar este elemento?'
     },

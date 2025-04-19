@@ -41,9 +41,9 @@ export class ProductFormComponent implements OnInit {
     date_release: new Date(),
     date_revision: new Date(),
   };
-
   productForm!: FormGroup;
   minDate: string = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  isEdit = false;
 
   constructor(
     private fb: FormBuilder,
@@ -56,23 +56,22 @@ export class ProductFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.listenToDateRelease();
   }
 
   getProductData() {
     const nav = this.router.getCurrentNavigation();
     const state = nav?.extras.state as { product: Product };
     if (state?.product) {
+      this.isEdit = true;
       this.product = state.product;
-    } else {
-      this.listenToDateRelease();
     }
   }
 
   buildForm() {
     this.productForm = this.fb.group({
       id: [
-        '',
+        { value: '', disabled: this.isEdit },
         [
           Validators.required,
           Validators.minLength(3),
@@ -139,15 +138,19 @@ export class ProductFormComponent implements OnInit {
       this.productForm.markAllAsTouched();
       return;
     }
-    if (this.productForm.valid) {
-      const isValid = await this.verificateId(this.product.id);
-      if (isValid) {
-        this.messageService.showMessage(
-          constants.MESSAGES.PRODUCTS.ID_EXIST,
-          'error'
-        );
-      } else {
-        this.createProduct(this.product);
+    if (this.isEdit) {
+      this.updateProduct(this.product);
+    } else {
+      if (this.productForm.valid) {
+        const isValid = await this.verificateId(this.product.id);
+        if (isValid) {
+          this.messageService.showMessage(
+            constants.MESSAGES.PRODUCTS.ID_EXIST,
+            'error'
+          );
+        } else {
+          this.createProduct(this.product);
+        }
       }
     }
   }
@@ -192,6 +195,31 @@ export class ProductFormComponent implements OnInit {
         } else {
           this.messageService.showMessage(
             constants.MESSAGES.PRODUCTS.ERROR_SAVE,
+            'error'
+          );
+        }
+      },
+      (error) => {
+        this.messageService.showMessage(
+          constants.MESSAGES.PRODUCTS.ERROR_SERVICE,
+          'error'
+        );
+      }
+    );
+  }
+
+  updateProduct(product: Product) {
+    this.productService.update(product.id, product).subscribe(
+      (response) => {
+        if (response.message === constants.RESPONSES.PRODUCTS.UPDATE_CORRECT) {
+          this.productForm.reset();
+          this.messageService.showMessage(
+            constants.MESSAGES.PRODUCTS.UPDATE,
+            'success'
+          );
+        } else {
+          this.messageService.showMessage(
+            constants.MESSAGES.PRODUCTS.ERROR_UPDATE,
             'error'
           );
         }
