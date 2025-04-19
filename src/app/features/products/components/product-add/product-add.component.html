@@ -1,0 +1,162 @@
+<div class="products-page">
+  <header class="header">
+    <h1>BANCO</h1>
+
+  </header>
+  <div class="form-container">
+    <form
+      class="form"
+      [formGroup]="productForm"
+      (ngSubmit)="onSubmit()"
+      autocomplete="off"
+      id="registroForm"
+    >
+      <h1>Formulario de Registro</h1>
+      <div class="line"></div>
+      <div class="form-grid">
+        <!-- ID -->
+        <div class="form-group">
+          <label for="id">ID</label>
+          <input
+            type="text"
+            id="id"
+            formControlName="id"
+            required
+            maxlength="10"
+          />
+          <span *ngIf="getFieldErrors('id').show" class="error-message">
+            <ng-container *ngIf="getFieldErrors('id').required"
+              >Este campo es requerido!</ng-container
+            >
+            <ng-container
+              *ngIf="
+                getFieldErrors('id').minlength || getFieldErrors('id').maxlength
+              "
+            >
+              ID no válido!
+            </ng-container>
+          </span>
+        </div>
+
+        <!-- Nombre -->
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input
+            type="text"
+            id="nombre"
+            formControlName="name"
+            required
+            maxlength="100"
+          />
+          <span *ngIf="getFieldErrors('name').show" class="error-message">
+            <ng-container *ngIf="getFieldErrors('name').required"
+              >Este campo es requerido!</ng-container
+            >
+            <ng-container
+              *ngIf="
+                getFieldErrors('name').minlength ||
+                getFieldErrors('name').maxlength
+              "
+            >
+              Nombre no válido!
+            </ng-container>
+          </span>
+        </div>
+
+        <!-- Descripción -->
+
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <input
+            type="text"
+            id="descripcion"
+            formControlName="description"
+            required
+            maxlength="200"
+          />
+          <span
+            *ngIf="getFieldErrors('description').show"
+            class="error-message"
+          >
+            <ng-container *ngIf="getFieldErrors('description').required"
+              >Este campo es requerido!</ng-container
+            >
+            <ng-container
+              *ngIf="
+                getFieldErrors('description').minlength ||
+                getFieldErrors('description').maxlength
+              "
+            >
+              Descripción no valida!
+            </ng-container>
+          </span>
+        </div>
+
+        <!-- Logo -->
+
+        <div class="form-group">
+          <label for="logo">Logo</label>
+          <input type="text" id="logo" formControlName="logo" required />
+          <span
+            class="error-message"
+            *ngIf="
+              productForm.get('logo')?.invalid &&
+              productForm.get('logo')?.touched
+            "
+            >Este campo es requerido!</span
+          >
+        </div>
+
+        <!-- Fecha Liberación -->
+
+        <div class="form-group">
+          <label for="fechaLiberacion">Fecha Liberación</label>
+          <input
+            type="date"
+            id="fechaLiberacion"
+            formControlName="date_release"
+            required
+            [min]="minDate"
+          />
+          <span
+            class="error-message"
+            *ngIf="
+              productForm.get('date_release')?.invalid &&
+              productForm.get('date_release')?.touched
+            "
+            >Este campo es requerido!</span
+          >
+        </div>
+
+        <!-- Fecha Revisión -->
+        <div class="form-group">
+          <label for="fechaRevision">Fecha Revisión</label>
+          <input
+            type="date"
+            id="fechaRevision"
+            formControlName="date_revision"
+            required
+            [disabled]="true"
+          />
+          <ng-container
+            *ngIf="getFieldErrors('date_release') as dateReleaseErrors"
+          >
+            <span *ngIf="dateReleaseErrors.show" class="error-message">
+              <ng-container *ngIf="dateReleaseErrors.required"
+                >Este campo es requerido!</ng-container
+              >
+              <ng-container *ngIf="dateReleaseErrors.minDate"
+                >La fecha debe ser mayor o igual a hoy!</ng-container
+              >
+            </span>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button type="reset" class="btn btn-reset">Reiniciar</button>
+        <button type="submit" class="btn btn-submit">Enviar</button>
+      </div>
+    </form>
+  </div>
+</div>

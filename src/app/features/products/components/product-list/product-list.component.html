@@ -5,7 +5,7 @@
   <section class="table-container">
     <div class="actions">
       <input type="text" class="search-input" placeholder="Search.."  [(ngModel)]="searchQuery"  (ngModelChange)="applyFilter()"/>
-      <button class="btn-agregar">Agregar</button>
+      <button class="btn-agregar" (click)="redirectToAdd()">Agregar</button>
     </div>
     <table class="products-table">
       <thead>
