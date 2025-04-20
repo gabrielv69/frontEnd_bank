@@ -17,7 +17,7 @@ export class MessagesComponent {
   ngOnInit(): void {
     this.messageService.message$.subscribe(msg => {
       this.message = msg;
-      setTimeout(() => this.message = null, 3000); // Ocultar mensaje después de 3 segundos
+      setTimeout(() => this.message = null, 3000);
 
     });
   }

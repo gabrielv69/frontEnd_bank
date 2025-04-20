@@ -16,7 +16,7 @@ export class ProductMenuComponent {
   constructor(private eRef: ElementRef) {}
 
   toggleMenu(event: Event) {
-    event.stopPropagation(); // Evita que se dispare el click del documento
+    event.stopPropagation();
     this.isOpen = !this.isOpen;
   }
 
@@ -28,7 +28,7 @@ export class ProductMenuComponent {
   }
 
   onMenuClick(event: MouseEvent) {
-    event.stopPropagation(); // Para evitar que se cierre cuando haces click en el propio menú
+    event.stopPropagation();
   }
 
   onEdit(): void {
