@@ -82,17 +82,15 @@ export class ProductListComponent implements OnInit {
 
   applyFilter(): void {
     const query = this.searchQuery.toLowerCase().trim();
-
     this.filteredProducts = this.products.filter((product) =>
       Object.values(product).some((value) =>
         String(value).toLowerCase().includes(query)
       )
     );
-
     this.updateVisibleProducts();
   }
 
-  redirectToAdd(product:Product | null) {
+  redirectToAdd(product: Product | null) {
     this.navigationService.goToAdd(product);
   }
 
@@ -101,7 +99,7 @@ export class ProductListComponent implements OnInit {
   }
 
   onDelete(product: Product) {
-    console.log('DELETE');
+    //TO DO
     console.log(product);
   }
 }
