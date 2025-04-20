@@ -44,6 +44,6 @@ npm run test
 For get test coverage run:
 
 ```bash
-test:coverage
+npm run test:coverage
 ```
 
